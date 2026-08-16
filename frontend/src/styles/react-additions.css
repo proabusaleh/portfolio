@@ -1,0 +1,113 @@
+/* ============================================
+   REACT APP ADDITIONS
+   AOS-style scroll reveals + toast container
+   ============================================ */
+
+[data-aos] {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+[data-aos].aos-animate {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+[data-aos='fade-up'] { transform: translateY(30px); }
+[data-aos='fade-left'] { transform: translateX(-30px); }
+[data-aos='fade-right'] { transform: translateX(30px); }
+[data-aos='zoom-in'] { transform: scale(0.85); }
+[data-aos='fade'] { transform: none; }
+[data-aos='fade-down'] { transform: translateY(-30px); }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: none;
+  }
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast-container .toast {
+  position: static;
+  transform: translateY(0);
+}
+
+.toast-container .toast.show {
+  transform: translateY(0);
+}
+
+/* Scrollbar (matches dark theme) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), var(--secondary));
+  border-radius: 10px;
+}
+
+/* Route change focus cleanup */
+body:has(.loader-wrapper.hidden) {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Resume template switcher */
+.resume-template-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.rts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  background: var(--bg-card, #1a1a2e);
+  color: var(--text-muted, #9ca3af);
+  border-radius: var(--radius-full, 50px);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rts-btn i {
+  font-size: 18px;
+}
+
+.rts-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.rts-btn.active {
+  background: var(--gradient, linear-gradient(135deg, #6d5efc, #3ecf8e));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 24px var(--accent-glow, rgba(109, 94, 252, 0.35));
+}

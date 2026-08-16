@@ -1,0 +1,461 @@
+/* ============================================
+   RESUME CLASSIC CV TEMPLATE
+   Scoped under .resume-classic so it never
+   leaks into the rest of the portfolio theme.
+   ============================================ */
+
+.resume-classic {
+  --cv2-navy: #1e3a6f;
+  --cv2-navy-dark: #142850;
+  --cv2-text: #333;
+  --cv2-muted: #666;
+  --cv2-bg: #f4f4f4;
+  --cv2-line: #dcdcdc;
+
+  font-family: 'Poppins', sans-serif;
+  color: var(--cv2-text);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Download bar */
+.resume-classic .download-bar {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resume-classic .download-btn {
+  background: var(--cv2-navy);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.25s;
+}
+
+.resume-classic .download-btn:hover {
+  background: var(--cv2-navy-dark);
+}
+
+.resume-classic .cv {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+/* ══════════════ SIDEBAR ══════════════ */
+.resume-classic .sidebar {
+  background: #fff;
+  border-right: 1px solid var(--cv2-line);
+  padding: 20px 18px 30px;
+}
+
+.resume-classic .photo-frame {
+  border: 3px solid var(--cv2-navy);
+  padding: 5px;
+  border-radius: 6px;
+  margin: 0 auto 22px;
+  width: 170px;
+  height: 190px;
+  overflow: hidden;
+}
+
+.resume-classic .photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.resume-classic .side-block {
+  margin-bottom: 22px;
+}
+
+.resume-classic .side-title {
+  background: var(--cv2-navy);
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.resume-classic .side-title i {
+  font-size: 16px;
+}
+
+.resume-classic .sub-title {
+  color: var(--cv2-navy);
+  font-size: 11.5px;
+  font-weight: 600;
+  margin: 12px 0 6px;
+  letter-spacing: 0.4px;
+  border-bottom: 1px dashed var(--cv2-line);
+  padding-bottom: 3px;
+}
+
+.resume-classic .contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.resume-classic .contact-list i {
+  color: var(--cv2-navy);
+  font-size: 15px;
+  min-width: 16px;
+}
+
+.resume-classic .side-list {
+  list-style: none;
+}
+
+.resume-classic .side-list.dashed li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.resume-classic .side-list.dashed li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--cv2-navy);
+  font-weight: bold;
+}
+
+.resume-classic .side-list.bullet li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.resume-classic .side-list.bullet li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--cv2-navy);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.resume-classic .lang-list {
+  list-style: none;
+}
+
+.resume-classic .lang-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.resume-classic .dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.resume-classic .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d0d5dd;
+  display: inline-block;
+}
+
+.resume-classic .dot.on {
+  background: var(--cv2-navy);
+}
+
+.resume-classic .personal-table {
+  width: 100%;
+  font-size: 11.5px;
+  border-collapse: collapse;
+}
+
+.resume-classic .personal-table td {
+  padding: 3px 0;
+  vertical-align: top;
+}
+
+.resume-classic .personal-table td:first-child {
+  color: var(--cv2-muted);
+  width: 90px;
+  font-weight: 500;
+}
+
+.resume-classic .hobbies {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.resume-classic .hobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.resume-classic .hobby i {
+  font-size: 22px;
+  color: var(--cv2-navy);
+  border: 1px solid var(--cv2-line);
+  padding: 6px;
+  border-radius: 4px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resume-classic .hobby span {
+  font-size: 10.5px;
+  color: var(--cv2-muted);
+}
+
+/* ══════════════ MAIN CONTENT ══════════════ */
+.resume-classic .main {
+  padding: 28px 32px;
+}
+
+.resume-classic .name-header {
+  border-bottom: 2px solid var(--cv2-navy);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.resume-classic .name-header h1 {
+  color: var(--cv2-navy);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.resume-classic .job-title {
+  font-size: 14px;
+  color: var(--cv2-text);
+  letter-spacing: 4px;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.resume-classic .main-block {
+  margin-bottom: 20px;
+}
+
+.resume-classic .main-title {
+  color: var(--cv2-navy);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--cv2-line);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.resume-classic .main-title i {
+  background: var(--cv2-navy);
+  color: #fff;
+  padding: 4px;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.resume-classic .optional {
+  font-size: 11px;
+  color: var(--cv2-muted);
+  font-weight: 400;
+  text-transform: none;
+  margin-left: 4px;
+}
+
+.resume-classic .objective {
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.resume-classic .exp-item {
+  margin-bottom: 14px;
+}
+
+.resume-classic .exp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.resume-classic .exp-head strong {
+  color: var(--cv2-navy);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.resume-classic .exp-head strong::before {
+  content: "●";
+  color: var(--cv2-navy);
+  margin-right: 6px;
+  font-size: 10px;
+}
+
+.resume-classic .company {
+  font-size: 12px;
+  margin-left: 16px;
+  margin-top: 2px;
+}
+
+.resume-classic .date {
+  color: var(--cv2-navy);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.resume-classic .exp-list {
+  margin: 4px 0 0 32px;
+  list-style: none;
+}
+
+.resume-classic .exp-list li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 12px;
+  margin-bottom: 3px;
+  line-height: 1.55;
+}
+
+.resume-classic .exp-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--cv2-navy);
+  font-weight: bold;
+  font-size: 14px;
+  top: -1px;
+}
+
+.resume-classic .edu-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  border: 1px solid var(--cv2-line);
+}
+
+.resume-classic .edu-table th {
+  background: #eef1f8;
+  color: var(--cv2-navy);
+  font-weight: 600;
+  padding: 7px 6px;
+  text-align: center;
+  border: 1px solid var(--cv2-line);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.resume-classic .edu-table td {
+  padding: 8px 6px;
+  border: 1px solid var(--cv2-line);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.resume-classic .edu-table td:first-child {
+  text-align: left;
+}
+
+.resume-classic .small {
+  font-size: 10px;
+  color: var(--cv2-muted);
+}
+
+.resume-classic .references {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.resume-classic .ref {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.resume-classic .ref strong {
+  color: var(--cv2-navy);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.resume-classic .ref i {
+  color: var(--cv2-navy);
+  margin-right: 4px;
+}
+
+/* Print */
+@media print {
+  .resume-classic .download-bar {
+    display: none;
+  }
+
+  .resume-classic .cv {
+    box-shadow: none;
+    max-width: 100%;
+  }
+
+  .resume-classic {
+    background: #fff;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .resume-classic .cv {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-classic .sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--cv2-line);
+  }
+
+  .resume-classic .references {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-classic .name-header h1 {
+    font-size: 26px;
+  }
+}
