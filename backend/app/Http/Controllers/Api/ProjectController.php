@@ -23,10 +23,10 @@ class ProjectController extends Controller
             });
         }
 
-        if ($request->category)          $query->where('category', $request->category);
-        if ($request->status)            $query->where('status', $request->status);
-        if ($request->year)              $query->where('year', $request->year);
-        if ($request->featured !== null) $query->where('featured', $request->featured === 'true');
+        if ($request->filled('category'))  $query->where('category', $request->category);
+        if ($request->filled('status'))    $query->where('status', $request->status);
+        if ($request->filled('year'))      $query->where('year', $request->year);
+        if ($request->filled('featured'))  $query->where('featured', $request->featured === 'true');
 
         $sortBy    = $request->sortBy ?? 'created_at';
         $sortOrder = $request->sortOrder ?? 'desc';

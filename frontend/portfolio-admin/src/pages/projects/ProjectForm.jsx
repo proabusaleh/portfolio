@@ -95,6 +95,8 @@ export default function ProjectForm() {
     defaultValues: DEFAULT_VALUES,
   });
 
+  const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL || 'http://localhost:5173';
+
   const title = watch('title');
 
   /* ── Fetch existing project ── */

@@ -7,6 +7,28 @@ import { timeAgo, truncate, cn } from '../../lib/utils';
 import { PATHS } from '../../router/routes';
 
 export default function RecentMessages({ messages }) {
+  if (!messages || messages.length === 0) {
+    return (
+      <Card>
+        <CardHeader
+          action={
+            <Link
+              to={PATHS.MESSAGES}
+              className="flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+            >
+              View all <ArrowRight className="w-3 h-3" />
+            </Link>
+          }
+        >
+          <CardTitle>Recent Messages</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <p className="text-sm text-gray-400 text-center py-8">No messages yet</p>
+        </CardBody>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader
@@ -46,12 +68,12 @@ export default function RecentMessages({ messages }) {
                     )}
                   </div>
                   <span className="text-[11px] text-gray-400 shrink-0">
-                    {timeAgo(msg.time)}
+                    {timeAgo(msg.created_at)}
                   </span>
                 </div>
                 <p className="text-xs font-medium mt-0.5 truncate">{msg.subject}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  {truncate(msg.preview, 70)}
+                  {truncate(msg.message, 70)}
                 </p>
               </div>
 

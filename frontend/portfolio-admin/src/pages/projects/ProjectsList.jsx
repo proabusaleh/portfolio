@@ -147,7 +147,8 @@ export default function ProjectsList() {
 
   /* ── Row actions ── */
   const handleEdit = (item) => navigate(`/projects/${item.id}/edit`);
-  const handleView = (item) => window.open(`/portfolio/${item.slug}`, '_blank');
+  const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL || 'http://localhost:5173';
+  const handleView = (item) => window.open(`${PUBLIC_URL}/project/${item.slug}`, '_blank');
   const handleDuplicate = async (item) => {
     try {
       await duplicateProject(item.id);
@@ -327,6 +328,7 @@ export default function ProjectsList() {
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={handleSort}
+          onRowClick={handleEdit}
           selectable
           selectedIds={selectedIds}
           onSelectRow={handleSelectRow}

@@ -8,12 +8,17 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CATEGORY_DATA } from '../../data/dashboardData';
 
-export default function CategoryChart() {
+const EMPTY_DATA = [];
+
+export default function CategoryChart({ data = EMPTY_DATA }) {
+  const chartData = data.length > 0
+    ? data
+    : [{ name: 'No data', count: 0, color: '#94a3b8' }];
+
   return (
     <ResponsiveContainer width="100%" height={280}>
-      <BarChart data={CATEGORY_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+      <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
         <XAxis
           dataKey="name"
@@ -36,7 +41,7 @@ export default function CategoryChart() {
           }}
         />
         <Bar dataKey="count" radius={[6, 6, 0, 0]} maxBarSize={40}>
-          {CATEGORY_DATA.map((entry) => (
+          {chartData.map((entry) => (
             <Cell key={entry.name} fill={entry.color} />
           ))}
         </Bar>

@@ -3,7 +3,7 @@ import { Eye, ArrowRight, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Card, { CardHeader, CardTitle, CardBody } from '../ui/Card';
 import Badge from '../ui/Badge';
-import { formatNumber } from '../../lib/utils';
+import { formatNumber, timeAgo } from '../../lib/utils';
 import { PATHS } from '../../router/routes';
 
 const CATEGORY_COLORS = {
@@ -11,9 +11,37 @@ const CATEGORY_COLORS = {
   Flutter:     'default',
   WooCommerce: 'warning',
   'UI/UX':     'danger',
+  React:       'info',
+  Laravel:     'danger',
+  'Vue.js':    'success',
+  'Node.js':   'success',
+  PHP:         'primary',
+  Mobile:      'warning',
 };
 
 export default function RecentProjects({ projects }) {
+  if (!projects || projects.length === 0) {
+    return (
+      <Card>
+        <CardHeader
+          action={
+            <Link
+              to={PATHS.PROJECTS}
+              className="flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+            >
+              View all <ArrowRight className="w-3 h-3" />
+            </Link>
+          }
+        >
+          <CardTitle>Recent Projects</CardTitle>
+        </CardHeader>
+        <CardBody>
+          <p className="text-sm text-gray-400 text-center py-8">No projects yet</p>
+        </CardBody>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader
@@ -42,12 +70,18 @@ export default function RecentProjects({ projects }) {
             >
               {/* Image */}
               <div className="relative h-32 overflow-hidden bg-gray-100 dark:bg-gray-800">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                    No image
+                  </div>
+                )}
                 <div className="absolute top-2 right-2">
                   <Badge
                     variant={project.status === 'published' ? 'success' : 'default'}
@@ -74,13 +108,13 @@ export default function RecentProjects({ projects }) {
                   <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
                     <span className="flex items-center gap-1">
                       <Eye className="w-3 h-3" />
-                      {formatNumber(project.views)}
+                      {formatNumber(project.views || 0)}
                     </span>
                   </div>
                 </div>
 
                 <p className="text-[11px] text-gray-400 mt-2">
-                  {project.date}
+                  {timeAgo(project.created_at)}
                 </p>
               </div>
             </motion.div>

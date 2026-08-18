@@ -1,12 +1,17 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { TRAFFIC_DATA } from '../../data/dashboardData';
 
-export default function TrafficChart() {
+const EMPTY_DATA = [];
+
+export default function TrafficChart({ data = EMPTY_DATA }) {
+  const chartData = data.length > 0
+    ? data
+    : [{ name: 'No data', value: 1, color: '#94a3b8' }];
+
   return (
     <ResponsiveContainer width="100%" height={280}>
       <PieChart>
         <Pie
-          data={TRAFFIC_DATA}
+          data={chartData}
           dataKey="value"
           nameKey="name"
           innerRadius={60}
@@ -14,7 +19,7 @@ export default function TrafficChart() {
           paddingAngle={4}
           stroke="none"
         >
-          {TRAFFIC_DATA.map((entry) => (
+          {chartData.map((entry) => (
             <Cell key={entry.name} fill={entry.color} />
           ))}
         </Pie>
