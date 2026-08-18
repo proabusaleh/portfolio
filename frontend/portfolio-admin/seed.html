@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<body>
+  <script>
+    const seed = {
+      state: {
+        user: { id: 1, name: 'Abu Saleh', email: 'admin@portfolio.com', role: 'admin', avatar: null },
+        token: 'fake-jwt-1-test',
+        isAuthenticated: true,
+      },
+      version: 0,
+    };
+    localStorage.setItem('portfolio-user', JSON.stringify(seed));
+    window.location.replace('/projects');
+  </script>
+</body>
+</html>
