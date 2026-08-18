@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, forwardRef } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-export default function Select({
+const Select = forwardRef(function Select({
   label,
   options = [],
   value,
@@ -13,15 +13,16 @@ export default function Select({
   className,
   id,
   fullWidth,
-}) {
+  name,
+}, ref) {
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  const wrapperRef = useRef(null);
   const selected = options.find((o) => o.value === value);
   const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) setOpen(false);
     }
     function handleEsc(e) {
       if (e.key === 'Escape') setOpen(false);
@@ -37,7 +38,7 @@ export default function Select({
   }, [open]);
 
   return (
-    <div ref={ref} className={cn('space-y-1.5', fullWidth && 'w-full', className)}>
+    <div ref={wrapperRef} className={cn('space-y-1.5', fullWidth && 'w-full', className)}>
       {label && (
         <label htmlFor={selectId} className="block text-sm font-medium">
           {label}
@@ -46,8 +47,10 @@ export default function Select({
 
       <div className="relative">
         <button
+          ref={ref}
           type="button"
           id={selectId}
+          name={name}
           disabled={disabled}
           onClick={() => setOpen((o) => !o)}
           className={cn(
@@ -99,4 +102,6 @@ export default function Select({
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
   );
-}
+});
+
+export default Select;
