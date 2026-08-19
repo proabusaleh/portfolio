@@ -259,7 +259,7 @@ export default function ProjectsList() {
       key: 'actions',
       label: '',
       align: 'right',
-      width: '40px',
+      width: '60px',
       render: (row) => (
         <RowActions
           item={row}

@@ -8,7 +8,7 @@ export default function RowActions({ item, actions }) {
       width="w-48"
       trigger={
         <button
-          className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 opacity-60 hover:opacity-100 transition"
+          className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           onClick={(e) => e.stopPropagation()}
         >
           <MoreVertical className="w-4 h-4" />
