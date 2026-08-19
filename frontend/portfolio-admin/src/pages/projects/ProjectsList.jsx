@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Edit, Eye, Copy, Trash2, Star, Archive } from 'lucide-react';
+import { Plus, Edit, Eye, Copy, Trash2, Star, Archive, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
 import PageHeader from '../../components/ui/PageHeader';
@@ -146,6 +146,7 @@ export default function ProjectsList() {
   };
 
   /* ── Row actions ── */
+  const handleViewPage = (item) => navigate(`/projects/${item.id}/view`);
   const handleEdit = (item) => navigate(`/projects/${item.id}/edit`);
   const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL || 'http://localhost:5173';
   const handleView = (item) => window.open(`${PUBLIC_URL}/project/${item.slug}`, '_blank');
@@ -202,7 +203,12 @@ export default function ProjectsList() {
           />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <p className="font-medium text-sm truncate">{row.title}</p>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleViewPage(row); }}
+                className="font-medium text-sm truncate hover:text-indigo-500 transition text-left"
+              >
+                {row.title}
+              </button>
               {row.featured && (
                 <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 shrink-0" />
               )}
@@ -258,8 +264,9 @@ export default function ProjectsList() {
         <RowActions
           item={row}
           actions={[
-            { label: 'Edit',      icon: Edit,    onClick: handleEdit },
-            { label: 'View live', icon: Eye,     onClick: handleView },
+            { label: 'View',       icon: Eye,     onClick: handleViewPage },
+            { label: 'Edit',       icon: Edit,    onClick: handleEdit },
+            { label: 'View live',  icon: ExternalLink,     onClick: handleView },
             { label: 'Duplicate', icon: Copy,    onClick: handleDuplicate },
             { divider: true },
             {
@@ -328,7 +335,7 @@ export default function ProjectsList() {
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={handleSort}
-          onRowClick={handleEdit}
+          onRowClick={handleViewPage}
           selectable
           selectedIds={selectedIds}
           onSelectRow={handleSelectRow}

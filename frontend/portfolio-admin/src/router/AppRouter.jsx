@@ -12,11 +12,14 @@ const Login          = lazy(() => import('../pages/auth/Login'));
 const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'));
 const Overview       = lazy(() => import('../pages/dashboard/Overview'));
 const ProjectsList   = lazy(() => import('../pages/projects/ProjectsList'));
+const ProjectView    = lazy(() => import('../pages/projects/ProjectView'));
 const ProjectForm    = lazy(() => import('../pages/projects/ProjectForm'));
 const BlogList       = lazy(() => import('../pages/blog/BlogList'));
+const BlogPostView   = lazy(() => import('../pages/blog/BlogPostView'));
 const BlogPostEdit   = lazy(() => import('../pages/blog/BlogPostEdit'));
 const BlogComments   = lazy(() => import('../pages/blog/BlogComments'));
 const ServicesList   = lazy(() => import('../pages/services/ServicesList'));
+const ServiceView    = lazy(() => import('../pages/services/ServiceView'));
 const SkillsList     = lazy(() => import('../pages/skills/SkillsList'));
 const Testimonials   = lazy(() => import('../pages/testimonials/TestimonialsList'));
 const MessagesInbox  = lazy(() => import('../pages/messages/MessagesInbox'));
@@ -64,12 +67,15 @@ export default function AppRouter() {
         <Route path={PATHS.DASHBOARD}    element={Protected(Overview)} />
         <Route path={PATHS.PROJECTS}     element={Protected(ProjectsList)} />
         <Route path={PATHS.PROJECT_NEW}  element={Protected(ProjectForm)} />
+        <Route path={PATHS.PROJECT_VIEW} element={Protected(ProjectView)} />
         <Route path={PATHS.PROJECT_EDIT} element={Protected(ProjectForm)} />
         <Route path={PATHS.BLOG_NEW}         element={Protected(BlogPostEdit)} />
+        <Route path={PATHS.BLOG_VIEW}        element={Protected(BlogPostView)} />
         <Route path={PATHS.BLOG_COMMENTS}    element={Protected(BlogComments)} />
         <Route path={PATHS.BLOG_EDIT}        element={Protected(BlogPostEdit)} />
         <Route path={PATHS.BLOG}             element={Protected(BlogList)} />
         <Route path={PATHS.SERVICES}     element={Protected(ServicesList)} />
+        <Route path={PATHS.SERVICE_VIEW} element={Protected(ServiceView)} />
         <Route path={PATHS.SKILLS}       element={Protected(SkillsList)} />
         <Route path={PATHS.TESTIMONIALS} element={Protected(Testimonials)} />
         <Route path={PATHS.MESSAGES}     element={Protected(MessagesInbox)} />

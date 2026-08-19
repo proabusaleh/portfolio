@@ -4,7 +4,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { cn } from '../../lib/utils';
 import Badge from '../ui/Badge';
 
-export default function ServiceCard({ service, onEdit, onDelete }) {
+export default function ServiceCard({ service, onEdit, onView, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: service.id,
   });
@@ -33,12 +33,20 @@ export default function ServiceCard({ service, onEdit, onDelete }) {
           <div {...attributes} {...listeners} className="mt-1 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
             <GripVertical className="w-4 h-4" />
           </div>
-          <div className={cn('w-10 h-10 rounded-lg bg-gradient-to-r flex items-center justify-center shrink-0', service.color)}>
+          <button
+            onClick={() => onView ? onView(service) : onEdit(service)}
+            className={cn('w-10 h-10 rounded-lg bg-gradient-to-r flex items-center justify-center shrink-0 hover:opacity-80 transition', service.color)}
+          >
             <i className={cn(service.icon, 'text-white text-lg')} />
-          </div>
+          </button>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-sm truncate">{service.title}</h3>
+              <button
+                onClick={() => onView ? onView(service) : onEdit(service)}
+                className="font-semibold text-sm truncate text-left hover:text-indigo-500 transition"
+              >
+                {service.title}
+              </button>
               {service.featured && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />}
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">

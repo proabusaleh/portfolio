@@ -227,6 +227,7 @@ export default function BlogList() {
                       if (checked) next.add(post.id); else next.delete(post.id);
                       setSelected(next);
                     }}
+                    onView={(id) => navigate(`/blog/${id}/view`)}
                     onEdit={(id) => navigate(`/blog/${id}/edit`)}
                     onDelete={(id) => setDeleteTarget(id)}
                   />
@@ -255,6 +256,7 @@ export default function BlogList() {
                       key={post.id}
                       posts={[post]}
                       loading={false}
+                      onView={(p) => navigate(`/blog/${p.id || post.id}/view`)}
                       onEdit={(p) => navigate(`/blog/${p.id || post.id}/edit`)}
                       onDelete={(p) => setDeleteTarget(p.id || post.id)}
                     />

@@ -10,7 +10,7 @@ const STATUS_VARIANT = {
   scheduled: 'primary',
 };
 
-export default function BlogListView({ post, selected, onSelect, onEdit, onDelete }) {
+export default function BlogListView({ post, selected, onSelect, onEdit, onView, onDelete }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
@@ -20,17 +20,22 @@ export default function BlogListView({ post, selected, onSelect, onEdit, onDelet
       <Checkbox checked={selected} onChange={onSelect} />
 
       {/* Cover */}
-      <img
-        src={post.cover_image}
-        alt={post.title}
-        className="w-14 h-14 rounded-lg object-cover shrink-0 border border-gray-200 dark:border-gray-800"
-        loading="lazy"
-      />
+      <button
+        onClick={() => onView ? onView(post.id) : onEdit(post.id)}
+        className="shrink-0"
+      >
+        <img
+          src={post.cover_image}
+          alt={post.title}
+          className="w-14 h-14 rounded-lg object-cover border border-gray-200 dark:border-gray-800 hover:opacity-80 transition"
+          loading="lazy"
+        />
+      </button>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
         <button
-          onClick={() => onEdit(post.id)}
+          onClick={() => onView ? onView(post.id) : onEdit(post.id)}
           className="font-semibold text-sm text-left hover:text-indigo-500 transition line-clamp-1"
         >
           {post.title}
