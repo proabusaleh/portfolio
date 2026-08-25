@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ActivityLogged;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
@@ -15,7 +16,7 @@ class ActivityLog extends Model
 
     public static function log($action, $module, $target, $details = null)
     {
-        return static::create([
+        $log = static::create([
             'user_id' => auth()->id(),
             'action'  => $action,
             'module'  => $module,
@@ -23,5 +24,10 @@ class ActivityLog extends Model
             'details' => $details,
             'ip'      => request()->ip(),
         ]);
+
+        // Broadcast in real-time
+        broadcast(new ActivityLogged($log))->toOthers();
+
+        return $log;
     }
 }

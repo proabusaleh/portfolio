@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->enum('status', ['active', 'unsubscribed', 'bounced'])->default('active');
             $table->json('tags')->nullable();
+            $table->string('unsubscribe_token', 64)->nullable()->unique()->after('tags');
+            $table->timestamp('unsubscribed_at')->nullable()->after('unsubscribe_token');
             $table->timestamp('subscribed_at')->nullable();
             $table->timestamp('last_open_at')->nullable();
             $table->timestamps();

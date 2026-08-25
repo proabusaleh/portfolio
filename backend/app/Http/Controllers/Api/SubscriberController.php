@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscriber;
+use App\Services\EmailService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class SubscriberController extends Controller
@@ -36,7 +38,24 @@ class SubscriberController extends Controller
         $data['status']       = 'active';
         $data['subscribed_at'] = now();
 
-        return response()->json(Subscriber::create($data), 201);
+        $subscriber = Subscriber::create($data);
+
+        // Send welcome email
+        $emailService = new EmailService();
+        $emailService->sendWelcomeEmail($subscriber);
+
+        // Real-time notification for new subscriber
+        NotificationService::notifyAdmins(
+            type: 'subscriber',
+            title: "New subscriber: {$subscriber->name}",
+            extra: [
+                'description' => $subscriber->email,
+                'actor'       => ['name' => $subscriber->name],
+                'link'        => '/newsletter',
+            ]
+        );
+
+        return response()->json($subscriber, 201);
     }
 
     public function show($id)

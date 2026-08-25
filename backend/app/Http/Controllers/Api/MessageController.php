@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MessageReceived;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Services\EmailService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -66,7 +69,28 @@ class MessageController extends Controller
         $data['starred'] = false;
         $data['folder']  = 'inbox';
 
-        return response()->json(Message::create($data), 201);
+        $message = Message::create($data);
+
+        // Send auto-reply email
+        $emailService = new EmailService();
+        $emailService->sendContactAutoReply($message);
+
+        // Broadcast in real-time
+        broadcast(new MessageReceived($message))->toOthers();
+
+        // Notify all admins
+        NotificationService::notifyAdmins(
+            type: 'message',
+            title: "New inquiry from {$message->name}",
+            extra: [
+                'description' => substr($message->message, 0, 100),
+                'actor'       => ['name' => $message->name, 'email' => $message->email],
+                'link'        => '/messages',
+                'priority'    => 'high',
+            ]
+        );
+
+        return response()->json($message, 201);
     }
 
     public function update(Request $request, $id)

@@ -17,11 +17,28 @@ use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\AnalyticsController;
+use App\Http\Controllers\EmailTrackingController;
+use App\Http\Controllers\EmailWebhookController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /* Public */
 Route::post('/login',           [AuthController::class, 'login'])->name('login');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/verify-otp',      [AuthController::class, 'verifyOtp']);
+Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+
+/* Email Tracking (Public) */
+Route::get('/track/open/{trackingId}', [EmailTrackingController::class, 'trackOpen']);
+Route::get('/track/click/{trackingId}', [EmailTrackingController::class, 'trackClick']);
+Route::get('/unsubscribe/{token}', [EmailTrackingController::class, 'unsubscribe']);
+
+/* Email Webhooks (Public - for email providers) */
+Route::post('/webhooks/ses/bounce', [EmailWebhookController::class, 'handleSesBounce']);
+Route::post('/webhooks/ses/complaint', [EmailWebhookController::class, 'handleSesComplaint']);
+Route::post('/webhooks/ses/delivery', [EmailWebhookController::class, 'handleSesDelivery']);
+Route::post('/webhooks/generic', [EmailWebhookController::class, 'handleGenericWebhook']);
 
 /* Protected */
 Route::middleware('auth:sanctum')->group(function () {
@@ -87,6 +104,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('settings',        [SettingController::class, 'save']);
     Route::get('settings/{key}',   [SettingController::class, 'show']);
 
+    /* Email Testing */
+    Route::middleware('throttle.email')->group(function () {
+        Route::post('email/test', function (Request $request) {
+            $request->validate(['email' => 'required|email']);
+            $emailService = new \App\Services\EmailService();
+            $success = $emailService->sendTestEmail($request->email);
+            return response()->json(['success' => $success]);
+        });
+    });
+
     /* Users (admin only) */
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('users', UserController::class);
@@ -106,4 +133,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/read-all',    [NotificationController::class, 'markAllRead']);
     Route::delete('notifications/{id}',      [NotificationController::class, 'destroy']);
     Route::delete('notifications',           [NotificationController::class, 'clearAll']);
+
+    /* Analytics */
+    Route::get('analytics',           [AnalyticsController::class, 'overview']);
+    Route::get('analytics/realtime',  [AnalyticsController::class, 'realtime']);
 });

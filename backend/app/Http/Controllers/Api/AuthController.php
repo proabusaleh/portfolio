@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Services\EmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +76,57 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Reset link sent to your email']);
+        $emailService = new EmailService();
+        $otp = $emailService->sendPasswordResetOtp($user->email, $user->name);
+
+        if ($otp) {
+            return response()->json(['message' => 'Reset code sent to your email']);
+        }
+
+        return response()->json(['message' => 'Failed to send reset code'], 500);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp'   => 'required|string|size:6',
+        ]);
+
+        $emailService = new EmailService();
+        $isValid = $emailService->verifyPasswordResetOtp($request->email, $request->otp);
+
+        if (!$isValid) {
+            throw ValidationException::withMessages([
+                'otp' => ['Invalid or expired code'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Code verified successfully']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|email',
+            'otp'      => 'required|string|size:6',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $emailService = new EmailService();
+        $isValid = $emailService->verifyPasswordResetOtp($request->email, $request->otp);
+
+        if (!$isValid) {
+            throw ValidationException::withMessages([
+                'otp' => ['Invalid or expired code'],
+            ]);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $user->update(['password' => Hash::make($request->password)]);
+
+        ActivityLog::log('password_reset', 'Auth', $user->email);
+
+        return response()->json(['message' => 'Password reset successfully']);
     }
 }

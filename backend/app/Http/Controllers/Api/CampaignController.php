@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
+use App\Services\EmailService;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
@@ -28,7 +29,7 @@ class CampaignController extends Controller
             'scheduled_at' => 'nullable|date',
         ]);
 
-        $data['status'] = 'draft';
+        $data['status'] = $request->scheduled_at ? 'scheduled' : 'draft';
 
         return response()->json(Campaign::create($data), 201);
     }
@@ -55,15 +56,19 @@ class CampaignController extends Controller
     {
         $campaign = Campaign::findOrFail($id);
 
-        $subscriberCount = \App\Models\Subscriber::where('status', 'active')->count();
+        if ($campaign->status === 'sent') {
+            return response()->json(['message' => 'Campaign already sent'], 400);
+        }
+
+        $emailService = new EmailService();
+        $recipientCount = $emailService->sendCampaignToSubscribers($campaign);
 
         $campaign->update([
             'status'     => 'sent',
             'sent_at'    => now(),
-            'recipients' => $subscriberCount,
         ]);
 
-        return response()->json(['message' => 'Campaign sent', 'recipients' => $subscriberCount]);
+        return response()->json(['message' => 'Campaign sent', 'recipients' => $recipientCount]);
     }
 
     public function sendTest(Request $request, $id)
@@ -71,6 +76,13 @@ class CampaignController extends Controller
         $campaign = Campaign::findOrFail($id);
         $request->validate(['email' => 'required|email']);
 
-        return response()->json(['message' => "Test email sent to {$request->email}"]);
+        $emailService = new EmailService();
+        $success = $emailService->sendTestEmail($request->email);
+
+        if ($success) {
+            return response()->json(['message' => "Test email sent to {$request->email}"]);
+        }
+
+        return response()->json(['message' => 'Failed to send test email'], 500);
     }
 }
