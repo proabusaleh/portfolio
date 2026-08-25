@@ -32,13 +32,23 @@ export default function ProjectDetails() {
   const showToast = useToast();
   const [project, setProject] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
-    getProject(slug).then((p) => { if (mounted) setProject(p); });
+    getProject(slug).then((p) => { if (mounted) { setProject(p); setLoading(false); } });
     getProjects().then((list) => { if (mounted) setProjects(list); });
     return () => { mounted = false; };
   }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="container section" style={{ textAlign: 'center', paddingTop: 80, paddingBottom: 80 }}>
+        <i className="bx bx-loader bx-spin" style={{ fontSize: 48, color: 'var(--accent)' }} />
+        <p style={{ color: 'var(--text-muted)', marginTop: 16 }}>Loading project...</p>
+      </div>
+    );
+  }
 
   if (!project) {
     return (

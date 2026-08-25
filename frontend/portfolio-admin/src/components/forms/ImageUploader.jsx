@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, X, GripVertical, Image as ImageIcon } from 'lucide-react';
-import { motion, Reorder } from 'framer-motion';
+import { Upload, X, GripVertical, Loader2 } from 'lucide-react';
+import { Reorder } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
+import { uploadFile } from '../../api/mediaApi';
 
 export default function ImageUploader({
   label = 'Images',
@@ -17,27 +18,38 @@ export default function ImageUploader({
   const [images, setImages] = useState(
     value.map((url, i) => ({ id: `${Date.now()}-${i}`, url, name: `image-${i + 1}` }))
   );
+  const [uploading, setUploading] = useState(false);
 
   const updateImages = (newImages) => {
     setImages(newImages);
     onChange(newImages.map((i) => i.url));
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     if (images.length + acceptedFiles.length > maxFiles) {
       toast.error(`Maximum ${maxFiles} images allowed`);
       return;
     }
 
-    const newImages = acceptedFiles.map((file) => ({
-      id: `${Date.now()}-${Math.random()}`,
-      url: URL.createObjectURL(file),
-      name: file.name,
-      file,
-    }));
+    setUploading(true);
+    try {
+      const uploadPromises = acceptedFiles.map(async (file) => {
+        const result = await uploadFile(file, 'blog');
+        return {
+          id: `${Date.now()}-${Math.random()}`,
+          url: result.url,
+          name: file.name,
+        };
+      });
 
-    updateImages(multiple ? [...images, ...newImages] : newImages);
-    toast.success(`${acceptedFiles.length} image(s) added`);
+      const uploaded = await Promise.all(uploadPromises);
+      updateImages(multiple ? [...images, ...uploaded] : uploaded);
+      toast.success(`${uploaded.length} image(s) uploaded`);
+    } catch {
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
     // eslint-disable-next-line
   }, [images, multiple, maxFiles]);
 
@@ -45,7 +57,8 @@ export default function ImageUploader({
     onDrop,
     accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.gif'] },
     multiple,
-    maxSize: 5 * 1024 * 1024, // 5MB
+    maxSize: 5 * 1024 * 1024,
+    disabled: uploading,
   });
 
   const removeImage = (id) => {
@@ -61,7 +74,6 @@ export default function ImageUploader({
         </div>
       )}
 
-      {/* Dropzone */}
       <div
         {...getRootProps()}
         className={cn(
@@ -69,20 +81,24 @@ export default function ImageUploader({
           isDragActive
             ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/30'
             : 'border-gray-300 dark:border-gray-700 hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800/50',
-          error && 'border-red-500'
+          error && 'border-red-500',
+          uploading && 'opacity-50 cursor-not-allowed'
         )}
       >
         <input {...getInputProps()} />
-        <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+        {uploading ? (
+          <Loader2 className="w-8 h-8 mx-auto text-indigo-500 mb-2 animate-spin" />
+        ) : (
+          <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+        )}
         <p className="text-sm font-medium">
-          {isDragActive ? 'Drop images here...' : 'Drag & drop images, or click to browse'}
+          {uploading ? 'Uploading...' : isDragActive ? 'Drop images here...' : 'Drag & drop images, or click to browse'}
         </p>
         <p className="text-xs text-gray-400 mt-1">
           PNG, JPG, WEBP, GIF up to 5MB each
         </p>
       </div>
 
-      {/* Previews (reorderable) */}
       {images.length > 0 && (
         <Reorder.Group
           axis="y"

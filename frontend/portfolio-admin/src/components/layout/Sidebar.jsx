@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronLeft, LogOut } from 'lucide-react';
+import { ChevronLeft, LogOut, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { NAV_ITEMS, PATHS } from '../../router/routes';
 import { useLayoutStore } from '../../store/layoutStore';
 import { cn } from '../../lib/utils';
 import Badge from '../ui/Badge';
+
+const SITE_URL = import.meta.env.VITE_SITE_URL || '/';
 
 export default function Sidebar() {
   const { collapsed, toggleCollapsed } = useLayoutStore();
@@ -84,8 +86,20 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* ── Bottom: Collapse toggle when collapsed / Logout ── */}
-      <div className="border-t border-gray-200 dark:border-gray-800 p-3 shrink-0">
+      {/* ── Bottom: View Site / Collapse toggle / Logout ── */}
+      <div className="border-t border-gray-200 dark:border-gray-800 p-3 shrink-0 space-y-2">
+        {/* View Site */}
+        <a
+          href={SITE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          title={collapsed ? 'View Site' : undefined}
+        >
+          <ExternalLink className="w-4 h-4 shrink-0" />
+          {!collapsed && <span>View Site</span>}
+        </a>
+
         {collapsed ? (
           <button
             onClick={toggleCollapsed}

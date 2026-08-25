@@ -1,23 +1,62 @@
 import api from './axios';
 
+/* ─── Field name mapping: frontend camelCase ↔ backend snake_case ─── */
+const FIELD_MAP_TO_SNAKE = {
+  coverImage: 'cover_image',
+  publishedAt: 'published_at',
+  scheduledAt: 'scheduled_at',
+  readTime: 'read_time',
+};
+
+const FIELD_MAP_TO_CAMEL = {
+  cover_image: 'coverImage',
+  published_at: 'publishedAt',
+  scheduled_at: 'scheduledAt',
+  read_time: 'readTime',
+  user_id: 'userId',
+};
+
+function toSnakeCase(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+  const result = {};
+  for (const [key, val] of Object.entries(obj)) {
+    const newKey = FIELD_MAP_TO_SNAKE[key] || key;
+    result[newKey] = val;
+  }
+  return result;
+}
+
+function toCamelCase(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+  const result = {};
+  for (const [key, val] of Object.entries(obj)) {
+    const newKey = FIELD_MAP_TO_CAMEL[key] || key;
+    result[newKey] = val;
+  }
+  return result;
+}
+
 export async function getPosts(params = {}) {
   const { data } = await api.get('/blog-posts', { params });
-  return data;
+  return {
+    ...data,
+    data: (data.data || []).map(toCamelCase),
+  };
 }
 
 export async function getPost(id) {
   const { data } = await api.get(`/blog-posts/${id}`);
-  return data;
+  return toCamelCase(data);
 }
 
 export async function createPost(payload) {
-  const { data } = await api.post('/blog-posts', payload);
-  return data;
+  const { data } = await api.post('/blog-posts', toSnakeCase(payload));
+  return toCamelCase(data);
 }
 
 export async function updatePost(id, payload) {
-  const { data } = await api.put(`/blog-posts/${id}`, payload);
-  return data;
+  const { data } = await api.put(`/blog-posts/${id}`, toSnakeCase(payload));
+  return toCamelCase(data);
 }
 
 export async function deletePost(id) {

@@ -1,10 +1,12 @@
-import { Menu, Search, Command } from 'lucide-react';
+import { Menu, Search, Command, ExternalLink } from 'lucide-react';
 import { useLayoutStore } from '../../store/layoutStore';
 import { useCommandStore } from '../../store/commandStore';
 import ThemeToggle from '../ui/ThemeToggle';
 import LanguageSwitcher from '../i18n/LanguageSwitcher';
 import NotificationDropdown from '../notifications/NotificationDropdown';
 import UserMenu from './UserMenu';
+
+const SITE_URL = import.meta.env.VITE_SITE_URL || '/';
 
 export default function Navbar() {
   const { openMobile } = useLayoutStore();
@@ -40,6 +42,15 @@ export default function Navbar() {
         <div className="flex items-center gap-2 ml-auto">
           <LanguageSwitcher />
           <ThemeToggle />
+          <a
+            href={SITE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View Site"
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-gray-600 dark:text-gray-300"
+          >
+            <ExternalLink className="w-5 h-5" />
+          </a>
           <NotificationDropdown />
           <UserMenu />
         </div>

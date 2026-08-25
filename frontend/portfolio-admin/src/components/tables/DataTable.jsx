@@ -15,6 +15,7 @@ export default function DataTable({
   selectedIds = [],
   onSelectRow,
   onSelectAll,
+  onRowClick,
   emptyState,
 }) {
   const allSelected = data.length > 0 && data.every((row) => selectedIds.includes(row.id));
@@ -75,9 +76,11 @@ export default function DataTable({
             data.map((row) => (
               <tr
                 key={row.id}
+                onClick={() => onRowClick?.(row)}
                 className={cn(
                   'border-b border-gray-100 dark:border-gray-800/50 group',
                   'hover:bg-gray-50 dark:hover:bg-gray-800/30 transition',
+                  onRowClick && 'cursor-pointer',
                   selectedIds.includes(row.id) && 'bg-indigo-50/40 dark:bg-indigo-950/20'
                 )}
               >

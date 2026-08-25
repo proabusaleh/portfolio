@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -21,6 +22,7 @@ import ServiceFormModal from '../../components/services/ServiceFormModal';
 import { getServices, deleteService, reorderServices } from '../../api/servicesApi';
 
 export default function ServicesList() {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
@@ -49,6 +51,7 @@ export default function ServicesList() {
 
   const handleAdd = () => { setEditing(null); setFormOpen(true); };
   const handleEdit = (service) => { setEditing(service); setFormOpen(true); };
+  const handleView = (service) => navigate(`/services/${service.id}/view`);
   const handleDelete = (service) => setDeleting(service);
 
   const confirmDelete = async () => {
@@ -118,6 +121,7 @@ export default function ServicesList() {
                   key={service.id}
                   service={service}
                   onEdit={handleEdit}
+                  onView={handleView}
                   onDelete={handleDelete}
                 />
               ))}

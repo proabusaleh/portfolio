@@ -12,7 +12,7 @@ const STATUS_VARIANT = {
   scheduled: 'primary',
 };
 
-export default function BlogCardView({ posts, loading, onEdit, onDelete, onDuplicate }) {
+export default function BlogCardView({ posts, loading, onEdit, onView, onDelete, onDuplicate }) {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -46,7 +46,10 @@ export default function BlogCardView({ posts, loading, onEdit, onDelete, onDupli
           className="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden hover:shadow-md transition-all"
         >
           {/* Cover image */}
-          <div className="relative h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <div
+            className="relative h-40 overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+            onClick={() => onView ? onView(post) : onEdit(post)}
+          >
             <img
               src={post.cover_image}
               alt={post.title}
@@ -101,7 +104,7 @@ export default function BlogCardView({ posts, loading, onEdit, onDelete, onDupli
             </div>
 
             <button
-              onClick={() => onEdit(post)}
+              onClick={() => onView ? onView(post) : onEdit(post)}
               className="text-left font-semibold text-sm line-clamp-2 hover:text-indigo-500 transition"
             >
               {post.title}

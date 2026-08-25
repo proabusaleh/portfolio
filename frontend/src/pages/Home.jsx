@@ -10,6 +10,7 @@ import CanvasParticles from '../components/CanvasParticles.jsx';
 import SectionHeader from '../components/SectionHeader.jsx';
 import { useTypewriter, useCountersOnView } from '../lib/hooks.js';
 import { getProjects } from '../lib/api.js';
+import { posts } from '../data/fallback.js';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -139,6 +140,11 @@ const MARQUEE_ITEMS = [
   'UI/UX Design',
   'Figma',
 ];
+
+// ─── Helpers ───────────────────────────────────────────────────────────────
+
+const fmtDate = (iso) =>
+  new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -578,6 +584,59 @@ export default function Home() {
           <div className="section-cta" data-aos="fade-up">
             <Link to="/portfolio" className="btn btn-primary btn-lg">
               View All Projects{' '}
+              <i className="bx bx-arrow-back bx-rotate-180" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── BLOG PREVIEW ────────────────────────────────────────────────── */}
+      <section className="blog-preview section" id="blog">
+        <div className="container">
+          <SectionHeader
+            tag="Blog"
+            title={
+              <>
+                Latest <span className="text-gradient">Articles</span>
+              </>
+            }
+            subtitle="Insights on web development, design, and the freelance journey"
+          />
+
+          <div className="blog-grid" data-aos="fade-up" data-aos-delay="100">
+            {posts.slice(0, 3).map((post, i) => (
+              <article className="blog-card" key={post.id} data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
+                <div className="blog-image">
+                  <div className="blog-image-placeholder" style={{ background: post.cover_gradient }}>
+                    <i className={`bx ${post.cover_icon}`} style={{ fontSize: '2.5rem', color: 'rgba(108,99,255,.3)' }} />
+                  </div>
+                  <div className="blog-category-badge">{post.category}</div>
+                </div>
+                <div className="blog-content">
+                  <div className="blog-meta">
+                    <span className="blog-date"><i className="bx bx-calendar" /> {fmtDate(post.published_at)}</span>
+                    <span className="blog-read"><i className="bx bx-time" /> {post.read_minutes} min read</span>
+                  </div>
+                  <h3 className="blog-title">
+                    <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h3>
+                  <p className="blog-excerpt">{post.excerpt}</p>
+                  <div className="blog-footer">
+                    <div className="blog-tags">
+                      {post.tags.slice(0, 3).map((t) => <span key={t}>{t}</span>)}
+                    </div>
+                    <Link to={`/blog/${post.slug}`} className="blog-read-more">
+                      Read <i className="bx bx-right-arrow-alt" />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="section-cta" data-aos="fade-up">
+            <Link to="/blog" className="btn btn-outline btn-lg">
+              View All Articles{' '}
               <i className="bx bx-arrow-back bx-rotate-180" />
             </Link>
           </div>

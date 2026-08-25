@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTheme, useScrollState } from '../lib/hooks.js';
 
+const DASHBOARD_URL = import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5180';
+
 const NAV_ITEMS = [
   { to: '/', number: '01', label: 'Home', end: true },
   { to: '/about', number: '02', label: 'About' },
@@ -138,6 +140,17 @@ export default function Navbar() {
         </div>
 
         <div className="nav-actions">
+          <a
+            href={DASHBOARD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="theme-toggle"
+            title="Dashboard"
+            aria-label="Open dashboard"
+          >
+            <i className="bx bxs-grid" />
+          </a>
+
           <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
             <i className={theme === 'dark' ? 'bx bx-sun' : 'bx bx-moon'} id="themeIcon" />
           </button>
