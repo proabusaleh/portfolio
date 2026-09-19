@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTheme, useScrollState } from '../lib/hooks.js';
 
-const DASHBOARD_URL = import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5180';
+const DASHBOARD_URL =
+  import.meta.env.VITE_DASHBOARD_URL ||
+  `${window.location.protocol}//${window.location.hostname}:5180`;
 
 const NAV_ITEMS = [
   { to: '/', number: '01', label: 'Home', end: true },
